@@ -21,7 +21,7 @@ Structures:
         -> Int Power
         -> String Name
 
-    Inventory:
+    Inventory: Dictionary
         -> Item Shield *TBA
         -> Item Left Hand
         -> Item Right Hand
@@ -56,16 +56,13 @@ Structures:
         -> Int Value
         -> Operator + - * /
 
-    Monster:
+    Monster: Tuple? or Class?
+        -> String Name
         -> Int HP
         -> Int Power
-        -> String Name
 
     Encounter: Queue
-        -> [Item]
-        -> [Monster]
-        -> Number 
-        -> Key?
+        -> List of (Monster, Item) Pairs
 
     Key:
         -> Number/Type?
