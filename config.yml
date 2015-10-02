@@ -1,0 +1,27 @@
+Materials:
+    - weight = '-speed'
+    - toughness = '*defence'    
+
+    Iron:
+        - weight = 10
+        - toughness = 3
+    Copper:
+        - weight = 5
+        - toughness = 0
+    Adamantine:
+        - weight = 2
+        - toughness = 10
+
+Armor:
+    - power = 0
+    - defence = 20
+    - speed = -10
+
+Conversions:
+    - total defence = armor defence * toughness
+    - total speed = armor speed - weight
+
+Player:
+    - power = 10
+    - defence = 10
+    - speed = 10

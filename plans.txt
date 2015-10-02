@@ -1,0 +1,136 @@
+# Text-Based RPG
+
+Ideas:
+    -> Basic character creation
+    -> Allocated points into stats
+    -> Randomly generated monster encounters
+    -> Finding items in treasure chests
+    -> Naming items
+    -> Healing
+    -> Random enchant, weapon type, weapon material
+
+Limitations:
+    -> Only one character
+    -> Bare-bones text-based UI
+    -> Keyword input
+    -> Minimal balancing
+
+Structures:
+    Character:
+        -> Int HP
+        -> Int Power
+        -> String Name
+
+    Inventory:
+        -> Item Shield *TBA
+        -> Item Left Hand
+        -> Item Right Hand
+        -> Item Armor
+        -> List [Item] Bag
+        -> (why not toss char stats in here if there's only one)
+        -> Int HP
+        -> Int Power
+        -> String Name
+        -> Int Level *TBA
+        -> Int Big Bucks *TBA
+
+    Item: Tuple
+        -> String Name
+        -> String Description
+        -> Int Stack Size
+        -> Bool Consumable
+        -> Stat Table (merge with player's)
+        -> Attribute Table (only used in creation?)
+    (Consider splitting items into armor, weapons, and consumables)
+
+    Stat Table: Dictionary
+        -> String Stat : Int Value
+
+    Attribute Table: Dictionary
+        -> String Class
+        -> String Type
+        -> String Material
+        -> String Modifier
+
+    Status Effect:
+        -> Int Value
+        -> Operator + - * /
+
+    Monster:
+        -> Int HP
+        -> Int Power
+        -> String Name
+
+    Encounter: Queue
+        -> [Item]
+        -> [Monster]
+        -> Number 
+        -> Key?
+
+    Key:
+        -> Number/Type?
+        -> Effect? *TBA
+
+    Game:
+        -> [Encounter]
+        -> Inventory
+        -> Character
+
+Pseudocode:
+    Generate list of encounters so that:
+        -Each key appears once
+        -Each encounter has Items/Monsters for loot and explore *Could be simplified
+    Generate final boss
+    Create a new character and empty inventory
+    Loop until character dies:
+        Choose path
+            -> if loot, hard items/monsters
+            -> if explore, easy ones
+        Present encounter
+            -> Fight all monsters
+            -> Give all items
+        Review
+        Start next turn
+        
+        **Special case: If player has all keys
+        Present final boss
+            -if win: set won flag and break
+            -if lose, progress normally, player hp == 0 -> lose
+    Congratulate / Tease player for winning or losing
+    Back to main menu
+
+Architecture ideas:
+    -> Probably simple enough to do straight imperative, cost of duplication
+    -> Entity System would work for expanding, but might be too complicated for now
+    -> Object orientation would work but scales badly and could be confusing
+
+Encounter generation pseudocode:
+    generate a list of items where n are armor, m are weapons, etc
+
+Item generation pseudocode:
+    given class, given style
+    generate Material, modifier
+    Name = modifier material style
+    Description = similar process
+    Stack size & consumable depend on class
+    Stats come from material + modifier + type
+    Example:
+        generate_item("armor", "helmet"):
+            material == "iron"
+            modifier == "tough"
+            name == "Tough Iron Helmet"
+            desc == "A piece of armor, specifically a helmet. It appears to be made of iron and seems tough."
+            stack == 1
+            consumable == False ??? where to pull this from?
+            stats = {
+                def = 10 "helmet" * 0.8 "iron" + 3 "tough" == 11
+                speed (e.g.) = -5 * 1.2 + 0 }
+
+Simplified Item Generation:
+    generate_armor()
+        name = "armor"
+        desc ...
+        stackSize = 1
+        consumable = False
+    generate_weapon()
+    generate_consumable()
