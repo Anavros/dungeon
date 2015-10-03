@@ -1,0 +1,2 @@
+-> change queue.queue to collections.deque or list
+-> 
