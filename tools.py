@@ -8,6 +8,7 @@ import stats
 
 def generate_encounters(turns):
     """ Return a queue of (Monster, Item) pairs of length TURNS."""
+    # TODO: change to collections.deque or a plain list
     encounters = queue.Queue()
     itemWeights = [("Armor", 2), ("Weapon", 4), ("Potion", 4)]
     itemPop = [item for (item, weight) in itemWeights for i in range(weight)]

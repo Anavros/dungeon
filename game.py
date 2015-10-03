@@ -4,7 +4,7 @@ import tools
 import stats
 import interface
 
-TURNS = 10
+TURNS = 5
 
 def fight_monster(): pass
 

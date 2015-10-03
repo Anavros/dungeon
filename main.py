@@ -5,12 +5,17 @@ import sys; sys.dont_write_bytecode = True
 
 import game
 import interface
+# Python 3 module import behavior testing
+import modules
+
+print(modules.my_func())
 
 print("+++Welcome to the Dungeon+++")
 while True:
     print("\nMain Menu")
     keyword = interface.get_command(['NEW', 'EXIT'])
     if keyword == 'NEW':
+        # TODO Include better character creation
         print("Enter your name: ", end="")
         name = interface.get_free_input()
 
