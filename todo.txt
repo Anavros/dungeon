@@ -1,2 +1,5 @@
--> change queue.queue to collections.deque or list
--> 
+-> Add monster variety using config files
+-> Add the ability to wear armor and use weapons
+-> Change %-formatted strings to use .format
+-> Avoid in-place mutation wherever possible
+-> Add more involved character creation

@@ -1,7 +1,10 @@
 #!/usr/bin/python3
+# coding=utf-8
+
 # Dungeon -> Main
 
 import sys; sys.dont_write_bytecode = True
+import copy
 
 import interface
 import tools
@@ -15,13 +18,9 @@ def main():
         print("\nMain Menu")
         keyword = interface.get_command(['NEW', 'EXIT'])
         if keyword == 'NEW':
-            # TODO Include better character creation
-            print("Enter your name: ", end="")
-            name = interface.get_free_input()
-
-            victory = start_new_game(name)
+            victory = start_new_game()
             if victory:
-                print("You won! Congratulations %s!" % name)
+                print("You won! Congratulations!")
             else:
                 print("You are dead.")
             interface.wait_for_input()
@@ -30,40 +29,44 @@ def main():
             break
 
 
-def fight_monster(): pass
-
-
-def examine_loot(): 
-    print("Ooo! Shiny loot!")
+def examine_loot(item): 
+    print("You found {}!".format(item))
 
 
 def retire(character):
+    """Set the character's HP to 0 and return a copy. Return a copy of character."""
+
+    char = character.copy()
     print("You get the heck out of that dungeon as soon as possible.")
     print("However, you trip on an unseen wire near the entrance!")
     print("You fall into a pit of terrible monsters.")
     print("There is no escaping from the dungeon.")
-    character['HP'] = 0
-    return character
+    char.stats['HP'] = 0
+    return char
 
 
-def present_encounter(monster, item, character):
-    print("You come face-to-face with %s!" % monster)
+def fight(character, monster):
+    """Pit the character against a monster until one or both are dead.
+    Return a copy of character."""
+
+    char = character.copy()
+    print("You come face-to-face with {}!".format(monster))
     while True:
         print("It lunges towards you!")
         pw = monster.stats['PW']
-        print("You take %s damage!" % pw)
-        character['HP'] -= pw
+        print("You take {} damage!".format(pw))
+        char.stats['HP'] -= pw
 
         print("What will you do?")
         keyword = interface.get_command(['ATTACK', 'WAIT', 'RETIRE'])
         if keyword.upper() == 'ATTACK':
-            pw = character['PW']
-            print("You attack the monster, dealing %s damage!" % pw)
+            pw = char.stats['PW']
+            print("You attack the monster, dealing {} damage!".format(pw))
             monster.stats['HP'] -= pw
         elif keyword.upper() == 'WAIT':
             print("You do nothing.")
         elif keyword.upper() == 'RETIRE':
-            character = retire(character)
+            char = retire(char)
         else:
             assert False, "We've made a mistake!"
 
@@ -72,48 +75,49 @@ def present_encounter(monster, item, character):
         if monster.stats['HP'] < 1:
             print("You have defeated the monster!")
             break
-        if character['HP'] < 1:
+        if char.stats['HP'] < 1:
             break
-    return character
+    return char
+
+
+def present_encounter(character, encounter):
+    """Offer the character a chance to fight a monster. Return a copy of character."""
+
+    char = character.copy()
+    (monster, item) = encounter
+    print("Do you wish to fight a monster?")
+    keyword = interface.get_command(['YES', 'NO'])
+    if keyword.upper() == 'YES':
+        char = fight(char, monster)
+    elif keyword.upper() == 'NO':
+        print("You slink past the monster unharmed.")
+
+    if char.is_alive():
+        examine_loot(item)
+    return char
     
 
-def start_new_game(name):
-    victory = False
-    heldItem = None
-    character = stats.build_table(hp=100, pw=20, df=10, sp=20)
+def start_new_game():
+    """Start a new round. Return True for a win or False for a loss."""
+
+    character = tools.generate_character()
     encounters = tools.generate_encounters(TURNS)
 
     print("You wander into an old, decrepit dungeon...\n")
 
-    while not encounters.empty():
-        (monster, item) = encounters.get()
+    for encounter in encounters:
         print("What will you do?")
-        interface.print_stat_table(character)
+        interface.print_stat_table(character.stats)
         keyword = interface.get_command(['EXPLORE', 'RETIRE'])
         if keyword.upper() == 'EXPLORE':
-            character = present_encounter(monster, item, character)
+            character = present_encounter(character, encounter)
         elif keyword.upper() == 'RETIRE':
             character = retire(character)
             interface.wait_for_input()
+        
+        if not character.is_alive():
+            return False
 
-        if character['HP'] > 0:
-            examine_loot()
-        else:
-            victory = False
-            break
-        interface.wait_for_input()
-
-    if character['HP'] < 1:
-        return False
-    # Needs to be moved to new sub
-    boss = tools.generate_final_boss()
-    treasure = tools.generate_treasure()
-    present_encounter(boss, treasure, character)
-    if character['HP'] > 0:
-        print("You have conquered the dungeon!")
-        victory = True
-    else:
-        victory = False
-    return victory
+    return True
 
 if __name__ == '__main__': main()

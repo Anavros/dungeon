@@ -1,15 +1,14 @@
+# coding=utf-8
 # Dungeon -> Tools
 
-import queue
 import random
 
 import objects
 import stats
 
 def generate_encounters(turns):
-    """ Return a queue of (Monster, Item) pairs of length TURNS."""
-    # TODO: change to collections.deque or a plain list
-    encounters = queue.Queue()
+    """ Return a list of (Monster, Item) pairs of length TURNS."""
+    encounters = []
     itemWeights = [("Armor", 2), ("Weapon", 4), ("Potion", 4)]
     itemPop = [item for (item, weight) in itemWeights for i in range(weight)]
 
@@ -27,8 +26,14 @@ def generate_encounters(turns):
 
         monster = generate_monster()
 
-        encounters.put((monster, item))
+        encounters.append((monster, item))
     return encounters
+
+
+def generate_character():
+    char = objects.Character()
+    char.stats = stats.build_table(hp=100, pw=20, df=10, sp=10)
+    return char
 
 
 def generate_final_boss():
@@ -36,6 +41,7 @@ def generate_final_boss():
     monster.stats = stats.build_table(hp=100, pw=5, df=5, sp=8)
     monster.name = "Spookazoran the Scary Dungeon Boss"
     return monster
+
 
 def generate_treasure():
     treasure = objects.Item()
