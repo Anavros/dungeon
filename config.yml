@@ -1,17 +1,15 @@
 monsters:
-    peon:
-        name: "Peon"
-        desc: "a simple, clumsy monster with scaled skin and a heavy brow"
-        stat:
-            hp: 30
-            pw: 5
-            df: 0
-            sp: 5
-    zippy:
-        name: "Zippy"
-        desc: "a smaller monster that likes to jump from the shadows and strike first"
-        stat:
-            hp: 15
-            pw: 2
-            df: 0
-            sp: 15
+    - name: "Peon"
+      desc: "a simple, clumsy monster with scaled skin and a heavy brow"
+      stat:
+          HP: 30
+          PW: 12
+          DF: 5
+          SP: 5
+    - name: "Zippy"
+      desc: "a smaller monster that likes to jump from the shadows and strike first"
+      stat:
+          HP: 15
+          PW: 7
+          DF: 2
+          SP: 15

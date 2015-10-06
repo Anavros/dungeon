@@ -6,6 +6,9 @@ import random
 import objects
 import stats
 
+# Set by config() in main.py
+monsterSet = []
+
 def generate_encounters(turns):
     """ Return a list of (Monster, Item) pairs of length TURNS."""
     encounters = []
@@ -32,7 +35,7 @@ def generate_encounters(turns):
 
 def generate_character():
     char = objects.Character()
-    char.stats = stats.build_table(hp=100, pw=20, df=10, sp=10)
+    char.stats = stats.build_table(hp=100, pw=20, df=5, sp=10)
     return char
 
 
@@ -50,8 +53,18 @@ def generate_treasure():
 
 def generate_monster():
     monster = objects.Monster()
-    monster.stats = stats.build_table(hp=10, pw=2, df=2, sp=3)
-    monster.name = "Monster Peon"
+    if monsterSet:
+        preset = random.choice(monsterSet)
+        hp = preset['stat']['HP']
+        pw = preset['stat']['PW']
+        df = preset['stat']['DF']
+        sp = preset['stat']['SP']
+        monster.stats = stats.build_table(hp=hp, pw=pw, df=df, sp=sp)
+        monster.name = preset['name']
+        monster.desc = preset['desc']
+    else:
+        monster.stats = stats.build_table(hp=10, pw=2, df=2, sp=3)
+        monster.name = "Monster Peon"
     return monster
 
 

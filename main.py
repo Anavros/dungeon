@@ -15,8 +15,14 @@ CONFIG = None
 with open('config.yml', 'r') as CONFIG_FILE:
     CONFIG = yaml.load(CONFIG_FILE)
 
+def config():
+    """Take the data found in config.yml and send it to the tools module."""
+    tools.monsterSet = CONFIG['monsters']
+
 def main():
     print("+++Welcome to the Dungeon+++")
+    if CONFIG is not None:
+        config()
     while True:
         print("\nMain Menu")
         keyword = interface.get_command(['NEW', 'CONFIG', 'EXIT'])
@@ -56,21 +62,26 @@ def fight(character, monster):
     Return a copy of character."""
 
     char = character.copy()
+    mons = monster.copy()
     print("You come face-to-face with {}!".format(monster))
     while True:
+        (char, loss, crit) = stats.damage(char, mons)
         print("It lunges towards you!")
-        pw = monster.stats['PW']
-        print("You take {} damage!".format(pw))
-        char.stats['HP'] -= pw
-
+        if crit: print("The attack catches you by surprise!")
+        print("You take {} damage!".format(loss))
         print("What will you do?")
-        keyword = interface.get_command(['ATTACK', 'WAIT', 'RETIRE'])
+
+        keyword = interface.get_command(['ATTACK', 'WAIT', 'LOOK', 'RETIRE'])
         if keyword.upper() == 'ATTACK':
-            pw = char.stats['PW']
-            print("You attack the monster, dealing {} damage!".format(pw))
-            monster.stats['HP'] -= pw
+            (mons, loss, crit) = stats.damage(mons, char)
+            if crit: print("You execute your attack with deft precision!")
+            print("You attack the monster, dealing {} damage!".format(loss))
         elif keyword.upper() == 'WAIT':
             print("You do nothing.")
+        elif keyword.upper() == 'LOOK':
+            print("You examine the monster.")
+            print("Is is {}.".format(mons.desc))
+            print("It has {} HP left.".format(mons.stats['HP']))
         elif keyword.upper() == 'RETIRE':
             char = retire(char)
         else:
@@ -78,10 +89,10 @@ def fight(character, monster):
 
         interface.wait_for_input()
 
-        if monster.stats['HP'] < 1:
+        if not mons.is_alive():
             print("You have defeated the monster!")
             break
-        if char.stats['HP'] < 1:
+        if not char.is_alive():
             break
     return char
 
