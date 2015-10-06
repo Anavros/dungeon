@@ -1,7 +1,6 @@
 # Dungeon -> Interface
 
 
-# TODO: Could include built-in help
 def get_command(options):
     """Reads input from STDIN and ensures it matches a given keyword.
     Please only give it capital options like NEW or it will cause problems."""

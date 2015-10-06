@@ -4,20 +4,23 @@
 # Dungeon -> Main
 
 import sys; sys.dont_write_bytecode = True
-import copy
+import yaml
 
 import interface
 import tools
 import stats
 
 TURNS = 5
+CONFIG = None
+with open('config.yml', 'r') as CONFIG_FILE:
+    CONFIG = yaml.load(CONFIG_FILE)
 
 def main():
     print("+++Welcome to the Dungeon+++")
     while True:
         print("\nMain Menu")
-        keyword = interface.get_command(['NEW', 'EXIT'])
-        if keyword == 'NEW':
+        keyword = interface.get_command(['NEW', 'CONFIG', 'EXIT'])
+        if keyword.upper() == 'NEW':
             victory = start_new_game()
             if victory:
                 print("You won! Congratulations!")
@@ -25,7 +28,10 @@ def main():
                 print("You are dead.")
             interface.wait_for_input()
 
-        elif keyword == 'EXIT':
+        elif keyword.upper() == 'CONFIG':
+            print(CONFIG)
+
+        elif keyword.upper() == 'EXIT':
             break
 
 
