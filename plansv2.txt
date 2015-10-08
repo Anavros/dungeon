@@ -1,0 +1,32 @@
+# Text-Based RPG
+
+Ideas:
+    -> Simple stat tables
+    -> Full unit testing from beginning
+    -> Yaml balance configuration
+
+Next Steps:
+    -> Key collection for final boss
+    -> One accessory to stack with base stats
+
+Limitations:
+    -> Only one character
+    -> Bare-bones text-based UI
+    -> Keyword input
+    -> No multi-item inventories
+    -> Simple monsters
+    -> No seed sharing
+    -> No custom objects
+    -> Avoid in-place mutation where possible
+    -> Only four stats
+
+Structures:
+    Stat Table: Dictionary
+        -HP, PW, DF, SP only
+        -Generated from function, never handmade
+    Keyring: Integer
+        -Increments by chance after beating monster
+    Monster: Stat Table
+        -Will need more complexity in the future maybe
+    Character: Stat Table
+    Held Item: Stat Table

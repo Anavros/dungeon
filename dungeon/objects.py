@@ -2,7 +2,7 @@
 # Dungeon -> Tools -> Objects
 
 import copy
-import stats
+import dungeon.stats
 
 class Actor(object):
     def __init__(self):

@@ -2,17 +2,14 @@
 # coding=utf-8
 
 # Dungeon -> Main
-
-import sys; sys.dont_write_bytecode = True
 import yaml
-
-import interface
-import tools
-import stats
+import interface as interface
+import tools as tools
+import stats as stats
 
 TURNS = 5
 CONFIG = None
-with open('config.yml', 'r') as CONFIG_FILE:
+with open('dungeon/config.yml', 'r') as CONFIG_FILE:
     CONFIG = yaml.load(CONFIG_FILE)
 
 def config():

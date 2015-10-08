@@ -3,8 +3,8 @@
 
 import random
 
-import objects
-import stats
+import dungeon.objects
+import dungeon.stats
 
 # Set by config() in main.py
 monsterSet = []
