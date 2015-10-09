@@ -10,3 +10,4 @@ class TestNewRoom:
         char = gen.monster()
         accs = gen.accessory()
         mons = gen.monster()
+        assert True, "I'm not sure what to test yet"

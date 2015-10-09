@@ -4,6 +4,7 @@
 import pytest
 import dungeon.stats as stats
 
+
 class TestTableBuilder:
     def test_defaults(s):
         table = stats.build_table()

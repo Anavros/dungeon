@@ -20,6 +20,10 @@ def get_command(options, inFn=input, outFn=print):
 #            else:
 #                pass
 
+# Untested
+def say(string):
+    print(string)
+
 
 # Lightly Tested
 def included(keyword, options):
@@ -38,6 +42,6 @@ def get_free_input(inFn=input):
 
 
 # Untested
-def wait_for_input(inFn=input, outFn=print):
-    outFn("...")
-    inFn()
+def wait_for_input():
+    print(" - ", end=" ")
+    input()

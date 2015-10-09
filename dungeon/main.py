@@ -5,28 +5,61 @@ import dungeon.stats as stats
 import dungeon.stats.generate as generate
 import dungeon.interface as interface
 
+#XXX
+import random
+
+MAX_KEYS = 2
+KEY_CHANCE = 0.5
+
+# Untested
 def begin():
-    # Start a new game
     # Print an entry message
+    interface.say("\nYou wander inside an old, decrepit dungeon...")
+    interface.wait_for_input()
+
     # Generate a new character
-    character = generate.monster()
-    accessory = generate.accessory()
+    #character = generate.monster()
+    #accessory = generate.accessory()
+    character = stats.stack(generate.monster(), generate.accessory())
     keys = 0
 
-def enter_room(character, accessory, keys):
-    # Generate a new monster
-    char = character.copy()
-    accs = accessory.copy()
-    if keys >= MAX_KEYS:
-        monster = generate.final_boss()
+    ###
+    while True:
+        (character, keys) = enter_room(character, keys)
+
+        if character['HP'] < 0 or keys >= MAX_KEYS:
+            break
+    ###
+
+    ###
+    if character['HP'] > 0:
+        interface.say("You have conquered the dungeon!")
     else:
-        monster = generate.monster()
+        interface.say("You gave your life to destroy the dungeon.")
+        interface.say("Thank you for your sacrifice.")
+    ###
 
-    (char, accs, monster) = fight(character, accessory, monster)
+# Untested
+def enter_room(character, keys):
+    # Don't mutate the inputs!
+    char = character.copy()
 
-    return (character, accessory, keys)
+    # Encounter the final boss if all keys have been gathered
+    if keys >= MAX_KEYS:
+        mons = generate.final_boss()
+    else:
+        mons = generate.monster()
 
-# If all keys, generate final boss instead
-# Loop the monster fight
-# Chance to give key
-# Fight another monster
+    # Loop the monster fight? XXX
+    (char, mons) = fight(char, mons)
+
+    if stats.crunch.chance(KEY_CHANCE):
+        keys = keys + 1
+
+    return (char, keys)
+
+
+# Untested
+def challenge(character, monster):
+    char = character.copy()
+    mons = monster.copy()
