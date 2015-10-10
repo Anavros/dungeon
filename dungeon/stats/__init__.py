@@ -1,1 +1,1 @@
-from dungeon.stats.core import build_table, extract, stack, output_table 
+from dungeon.stats.core import build_table, extract, stack, string_repr 

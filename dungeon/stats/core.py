@@ -54,10 +54,11 @@ def stack(*tables):
 
 
 # Untested
-def output_table(table, outFn=print):
+def string_repr(table):
     """Displays a string containing a given table's values."""
 
-    outFn("HP: {} | PW: {} | DF: {} | SP: {}".format(extract(table)))
+    (hp, pw, df, sp) = extract(table)
+    return "HP: {0} | PW: {1} | DF: {2} | SP: {3}".format(hp, pw, df, sp)
 
 
 # Untested

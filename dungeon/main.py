@@ -2,11 +2,9 @@
 # Dungeon -> Main
 
 import dungeon.stats as stats
+import dungeon.stats.crunch as crunch
 import dungeon.stats.generate as generate
 import dungeon.interface as interface
-
-#XXX
-import random
 
 MAX_KEYS = 2
 KEY_CHANCE = 0.5
@@ -50,16 +48,33 @@ def enter_room(character, keys):
     else:
         mons = generate.monster()
 
-    # Loop the monster fight? XXX
-    (char, mons) = fight(char, mons)
+    while True:
+        (char, mons) = step_fight(char, mons)
+        interface.say("YOU: {}".format(stats.string_repr(char)))
+        interface.say("MON: {}".format(stats.string_repr(mons)))
+        interface.wait_for_input()
 
-    if stats.crunch.chance(KEY_CHANCE):
+        if char['HP'] <= 0:
+            break
+        if mons['HP'] <= 0:
+            break
+
+    if crunch.chance(KEY_CHANCE):
         keys = keys + 1
+        interface.say("New key!")
 
     return (char, keys)
 
 
 # Untested
-def challenge(character, monster):
+def step_fight(character, monster):
     char = character.copy()
     mons = monster.copy()
+    if crunch.first_moves_first(char, mons):
+        mons = crunch.damage(mons, char)
+        char = crunch.damage(char, mons)
+    else:
+        mons = crunch.damage(mons, char)
+        char = crunch.damage(char, mons)
+
+    return (char, mons)
