@@ -2,6 +2,7 @@
 # Dungeon -> Stats -> Crunch
 
 import random
+from dungeon.exceptions import GameOverException, YouAreDeadException
 
 # Untested (no need)
 def chance(n):
@@ -31,6 +32,7 @@ def damage(character, monster, rand=True):
     char['HP'] -= loss
     if char['HP'] < 0:
         char['HP'] = 0
+        raise YouAreDeadException(gamewon=False)
     return char
 
 

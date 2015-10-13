@@ -23,7 +23,16 @@ def begin():
 
     ###
     while True:
-        (character, keys) = enter_room(character, keys)
+        try:
+            (character, keys) = enter_room(character, keys)
+        except GameOverException as e:
+            if e.gamewon:
+                interface.say("You have conquered the dungeon!")
+            else:
+                interface.say("You gave your life to destroy the dungeon.")
+                interface.say("Thank you for your sacrifice.")
+
+            break
 
         if character['HP'] < 0 or keys >= MAX_KEYS:
             break
@@ -49,15 +58,13 @@ def enter_room(character, keys):
         mons = generate.monster()
 
     while True:
-        (char, mons) = step_fight(char, mons)
+        try:
+            (char, mons) = step_fight(char, mons)
+        except YouAreDeadException as e:
+            break
         interface.say("YOU: {}".format(stats.string_repr(char)))
         interface.say("MON: {}".format(stats.string_repr(mons)))
         interface.wait_for_input()
-
-        if char['HP'] <= 0:
-            break
-        if mons['HP'] <= 0:
-            break
 
     if crunch.chance(KEY_CHANCE):
         keys = keys + 1
