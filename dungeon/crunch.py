@@ -2,14 +2,12 @@
 # Dungeon -> Stats -> Crunch
 
 import random
-from dungeon.exceptions import GameOverException, YouAreDeadException
+from dungeon.exceptions import YouAreDeadException
 
-# Untested (no need)
 def chance(n):
     return random.uniform(0, 1) < n
 
 
-# Untested (no need) ((will inevitable come back to bite me in the ass))
 def tweak(n, low=0.6, high=1.4):
     return int(n * random.uniform(low, high))
 
@@ -32,7 +30,7 @@ def damage(character, monster, rand=True):
     char['HP'] -= loss
     if char['HP'] < 0:
         char['HP'] = 0
-        raise YouAreDeadException(gamewon=False)
+        raise YouAreDeadException(game_won=False)
     return char
 
 

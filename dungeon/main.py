@@ -2,13 +2,15 @@
 # Dungeon -> Main
 
 import malt
-import dungeon.core as stats
+import dungeon.stats as stats
 import dungeon.crunch as crunch
 import dungeon.generate as generate
+import dungeon.exceptions as exceptions
 
 MAX_KEYS = 2
 KEY_CHANCE = 0.5
 
+# TODO: add a main menu
 def begin():
     malt.show("\nYou wander inside an old, decrepit dungeon...")
     malt.pause()
@@ -21,8 +23,8 @@ def begin():
     while True:
         try:
             (character, keys) = enter_room(character, keys)
-        except GameOverException as e:
-            if e.gamewon:
+        except exceptions.YouAreDeadException as e:
+            if e.game_won:
                 malt.show("You have conquered the dungeon!")
             else:
                 malt.show("You gave your life to destroy the dungeon.")
@@ -42,7 +44,6 @@ def begin():
         malt.show("Thank you for your sacrifice.")
     ###
 
-# Untested
 def enter_room(character, keys):
     # Don't mutate the inputs!
     char = character.copy()
@@ -56,7 +57,7 @@ def enter_room(character, keys):
     while True:
         try:
             (char, mons) = step_fight(char, mons)
-        except YouAreDeadException as e:
+        except exceptions.YouAreDeadException as e:
             break
         malt.show("YOU: {}".format(stats.string_repr(char)))
         malt.show("MON: {}".format(stats.string_repr(mons)))
@@ -69,7 +70,6 @@ def enter_room(character, keys):
     return (char, keys)
 
 
-# Untested
 def step_fight(character, monster):
     char = character.copy()
     mons = monster.copy()
