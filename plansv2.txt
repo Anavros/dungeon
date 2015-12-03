@@ -11,7 +11,7 @@ Next Steps:
 
 Limitations:
     -> Only one character
-    -> Bare-bones text-based UI
+    -> Bare-bones text-based UI using malt
     -> Keyword input
     -> No multi-item inventories
     -> Simple monsters

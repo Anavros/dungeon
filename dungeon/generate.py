@@ -2,7 +2,7 @@
 # Dungeon -> Stats -> Generate
 
 import random
-import dungeon.stats as stats
+import dungeon.core as stats
 
 # These could easily be factored out!
 def monster():

@@ -1,23 +1,19 @@
 # coding=utf-8
 # Dungeon -> Main
 
-import dungeon.stats as stats
-import dungeon.stats.crunch as crunch
-import dungeon.stats.generate as generate
-import dungeon.interface as interface
+import malt
+import dungeon.core as stats
+import dungeon.crunch as crunch
+import dungeon.generate as generate
 
 MAX_KEYS = 2
 KEY_CHANCE = 0.5
 
-# Untested
 def begin():
-    # Print an entry message
-    interface.say("\nYou wander inside an old, decrepit dungeon...")
-    interface.wait_for_input()
+    malt.show("\nYou wander inside an old, decrepit dungeon...")
+    malt.pause()
 
     # Generate a new character
-    #character = generate.monster()
-    #accessory = generate.accessory()
     character = stats.stack(generate.monster(), generate.accessory())
     keys = 0
 
@@ -27,10 +23,10 @@ def begin():
             (character, keys) = enter_room(character, keys)
         except GameOverException as e:
             if e.gamewon:
-                interface.say("You have conquered the dungeon!")
+                malt.show("You have conquered the dungeon!")
             else:
-                interface.say("You gave your life to destroy the dungeon.")
-                interface.say("Thank you for your sacrifice.")
+                malt.show("You gave your life to destroy the dungeon.")
+                malt.show("Thank you for your sacrifice.")
 
             break
 
@@ -40,10 +36,10 @@ def begin():
 
     ###
     if character['HP'] > 0:
-        interface.say("You have conquered the dungeon!")
+        malt.show("You have conquered the dungeon!")
     else:
-        interface.say("You gave your life to destroy the dungeon.")
-        interface.say("Thank you for your sacrifice.")
+        malt.show("You gave your life to destroy the dungeon.")
+        malt.show("Thank you for your sacrifice.")
     ###
 
 # Untested
@@ -62,13 +58,13 @@ def enter_room(character, keys):
             (char, mons) = step_fight(char, mons)
         except YouAreDeadException as e:
             break
-        interface.say("YOU: {}".format(stats.string_repr(char)))
-        interface.say("MON: {}".format(stats.string_repr(mons)))
-        interface.wait_for_input()
+        malt.show("YOU: {}".format(stats.string_repr(char)))
+        malt.show("MON: {}".format(stats.string_repr(mons)))
+        malt.pause()
 
     if crunch.chance(KEY_CHANCE):
         keys = keys + 1
-        interface.say("New key!")
+        malt.show("New key!")
 
     return (char, keys)
 
